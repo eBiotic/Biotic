@@ -195,8 +195,6 @@ obs$latitude[!idNA] <- obs$Latitude_deb[!idNA]
 obs <- st_as_sf(obs, coords = c('longitude','latitude'), crs = 4326) %>%
        st_transform(crs = 32198)
 
-# Remove observations that are not in the St. Lawrence
-!!!!!!!!!!!!!!!
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -217,6 +215,21 @@ obs <- obs %>%
         select(-No_voy, -No_affec, -No_sortie, -No_trait, -Div_OPANO, -Prof_m,
                -Duree_act_h, -Pds_capt_kg, -Sp_visee) %>%
         filter(presence > 0)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                               SELECT OBSERVATIONS
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Choose points located in the St. Lawrence only
+# Some are obvious mistakes (inland fishing events)
+# Load EGSL outline
+load('./eDriversGrids/Data/egslSimple.RData')
+
+# Intersect fisheries events with EGSL
+obs <- obs %>%
+       st_intersects(egslSimple, .) %>%
+       unlist() %>%
+       obs[., ]
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
