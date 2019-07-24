@@ -3,6 +3,7 @@ removeTaxa <- c(
   'Acanthephyra pelagica', # Surveys not designed to capture these taxa, pelagic species
   'Acanthephyra sp.', # Surveys not designed to capture these taxa, pelagic species
   "Acipenseridae", # Group is too coarse
+  "Acipenseriformes", # Group is too coarse
   'Actiniaria',  # Group is too coarse# Group is too coarse
   'Agarum clathratum', # Surveys not designed to capture these taxa
   'Agarum sp.', # Surveys not designed to capture these taxa
@@ -13,12 +14,14 @@ removeTaxa <- c(
   "Ammodytidae", # Group is too coarse
   'Amphipoda', # Group is too coarse
   "Anarhichadidae", # Group is too coarse
+  "Anguilliformes", # Group is too coarse
   "Anguilloidei", # Group is too coarse
   'Annelida',  # Group is too coarse
   'Anthozoa', # Group is too coarse
   "Aphroditidae", # Group is too coarse
   'Archaeogastropoda', # Group is too coarse
   "Argentinidae", # Group is too coarse
+  "Argis sp.", # Group is too coarse
   'Asteriidae', # Group is too coarse
   'Asteroidea', # Group is tåoo coarse
   'Bivalvia', # Group is too coarse
@@ -30,6 +33,8 @@ removeTaxa <- c(
   'Cardiidae', # Group is too coarse
   'Cephalaspidea', # Group is too coarse
   'Cephalopoda', # Group is too coarse
+  "Ceratiidae", # Group is too coarse
+  "Chauliodontinae", # Group is too coarse
   "Chondrichthyes", # Group is too coarse
   'Chondrus crispus', # Surveys not designed to capture these taxa
   'Cirripedia', # Group is too coarse
@@ -73,6 +78,8 @@ removeTaxa <- c(
   'Isididae', # Group is too coarse
   'Isopoda', # Group is too coarse
   'Laminaria sp.', # Surveys not designed to capture these taxa
+  'Lamnidae', # Group is too coarse
+  'Lamniformes', # Group is too coarse
   'Lebbeus sp.', # species readily identified
   'Lepidoteuthidae', # Group is too coarse
   'Liparidae', # Group is too coarse
@@ -85,6 +92,7 @@ removeTaxa <- c(
   'Lycenchelys sp.', # species distinguishable
   'Lycodes sp.', # species distinguishable
   "Macrouridae", # Group is too coarse
+  'Macrura', # Group is too coarse
   'Maldanidae', # Group is too coarse & survey not designed to capture this taxon
   'Meganyctiphanes norvegica', # pelagic species # Surveys not designed to capture these taxa
   'Melinna cristata', # Identification difficult, likely grouped as 'Polychaeta'
@@ -115,10 +123,12 @@ removeTaxa <- c(
   'Paralepididae', # Group is too coarse
   'Paraliparis sp.', # species distinguishable
   "Pectinidae", # Group is too coarse
+  "Pennatulacea", # Group is too coarse
   "Perciformes", # Group is too coarse
   'Phaeophyceae', # Surveys not designed to capture these taxa
   "Phalacrocoracidae", # Group is too coarse
   'Phoca sp.', # Group is too coarse
+  'Phocoenidae', # Group is too coarse
   "Pinnipedia", # Group is too coarse
   'Pleuromamma sp.', # Survey not designed for it
   'Placopecten magellanicus', # coastal & shallow water species # Surveys not designed to capture these taxa
@@ -130,7 +140,9 @@ removeTaxa <- c(
   'Priapulus caudatus', # Surveys not designed to capture these taxa
   'Pteraster sp.', # species easily distinguishable
   'Pycnogonida', # Group is too coarse
+  "Raja sp.", # Group is too coarse
   "Rajidae", # Group is too coarse
+  "Rajiformes", # Group is too coarse
   'Rhodophyta', # Surveys not designed to capture these taxa
   'Sabinea sp.', # species readily identified
   'Salmo sp.', # species readily identified
@@ -145,6 +157,7 @@ removeTaxa <- c(
   'Sipunculus sp.', # Hard to identify in the field
   'Spirontocaris sp.', # species readily identified
   "Squalidae", # Group is too coarse
+  "Squaliformes", # Group is too coarse
   'Sternoptychidae', # Group is too coarse
   'Stichaeidae', # Group is too coarse
   "Teuthida", # Group is too coarse
