@@ -156,7 +156,7 @@ combineTaxa <- c(
   # Combine at the species level, likely the only species of that group in the
   # St. Lawrence
   'Arrhoges occidentalis | Aporrhais sp.',
-  'Lythodes maja | Lithodes sp.',
+  'Lithodes maja | Lithodes sp.',
   'Crossaster papposus | Crossaster sp.',
   'Terebratulina septentrionalis | Terebratulina sp.',
   'Chionoecetes opilio | Chionoecetes sp.',

@@ -199,24 +199,24 @@ for(i in 1:length(combineTaxa)) {
   # if taxon exist in list, replace taxa name that will be aggregated with taxonComb
   if(sum(taxonCombRec) > 0) {
     # Extract variables for taxon used for combination
-    taxonComb <- sp[taxonCombRec, ][1, c('EspGen','N_EspSci','N_EspF')]
+    taxonComb <- sp[taxonCombRec, ][1, c('EspGen','N_EspSci')]
 
     # Identify which taxa have to be combined with taxonComb
     taxaReplace <- sp[, 'N_EspSci'] %in% combineTaxa[[i]][2:nTaxa]
 
     # Replace names of taxa to combine with taxonComb
-    sp[taxaReplace, c('EspGen','N_EspSci','N_EspF')] <- taxonComb
+    sp[taxaReplace, c('EspGen','N_EspSci')] <- taxonComb
   } else {
     # Create new EspGen for taxon and create vector of variables used to describe taxon used for combination
     # !!!!! There may already be an existing number. Need to figure this out at some point !!!!!!
     newEspGen <- max(as.numeric(paste(sp[,'EspGen']))) + 1
-    taxonComb <- data.frame(EspGen = newEspGen, N_EspSci = combineTaxa[[i]][1], N_EspF = combineTaxa[[i]][1], stringsAsFactors = FALSE)
+    taxonComb <- data.frame(EspGen = newEspGen, N_EspSci = combineTaxa[[i]][1], stringsAsFactors = FALSE)
 
     # Identify which taxa have to be combined with taxonComb
     taxaReplace <- sp[, 'N_EspSci'] %in% combineTaxa[[i]][2:nTaxa]
 
     # Replace names of taxa to combine with taxonComb
-    sp[taxaReplace, c('EspGen','N_EspSci','N_EspF')] <- taxonComb
+    sp[taxaReplace, c('EspGen','N_EspSci')] <- taxonComb
   }
 }
 
