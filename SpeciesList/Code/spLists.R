@@ -11,5 +11,4 @@ sp <- rbind(spList, zifSp, obsSp) %>%
       summarise(Count = sum(CountRec)) %>%
       as.data.frame()
 
-
-sentMobSp$check <- sentMobSp$species %in% sp$species
+save(sp, file = './SpeciesList/Data/SpeciesList.RData')
