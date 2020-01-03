@@ -61,7 +61,7 @@ sp <- sp %>%
       rename(species = N_EspSci,
              presence = Presence) %>%
       mutate(surveyID = paste(cruise, set, sep = '-')) %>%
-      select(-vessel, -cruise, -set, -strat, -time, -duration, -N_EspF, -EspGen)
+      select(-vessel, -cruise, -set, -strat, -time, -duration, -EspGen)
 
 # Format north pluri data
 np <- np %>%
