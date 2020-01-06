@@ -12,7 +12,7 @@ library(tidyverse)
 # For more information read the repo's README.md document.
 
 # Output location for downloaded data
-output <- './ZIF-Fisheries-2010-2015/Data/RawData'
+output <- './BioticData/ZIF-Fisheries-2010-2015/Data/RawData'
 
 # Data will need to be archived to Zenodo with restricted access and downloaded
 # using an access token.
@@ -137,7 +137,7 @@ for(i in 1:nrow(spList)) zif$Sp_vise <-  gsub(spList[i,1], spList[i,2], zif$Sp_v
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # All information in './SpeciesFormatting/Code/removeTaxa.R'
 # source('./SpeciesFormatting/Code/removeTaxa.R')
-load('./SpeciesFormatting/Data/removeTaxa.RData')
+load('./BioticData/SpeciesFormatting/Data/removeTaxa.RData')
 # zifSp <- zifSp[!zifSp$species %in% removeTaxa, ] # Remove from species list
 zif <- zif[!zif$Sp_capture %in% removeTaxa, ] # Remove from dataset
 
@@ -155,7 +155,7 @@ zifSp <- table(zif$Sp_capture) %>%
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                  Transform Coordinates
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-source('./ZIF-Fisheries-2010-2015/Code/dmsTOdd.R')
+source('./BioticData/ZIF-Fisheries-2010-2015/Code/dmsTOdd.R')
 zif[, "Latitude"] <- unlist(lapply(X = zif[, "Latitude"], FUN = dmsTOdd))
 zif[, "Longitude"] <- unlist(lapply(X = zif[, "Longitude"], FUN = dmsTOdd, type = 'long'))
 
@@ -204,5 +204,5 @@ zif <- zif %>%
 #                                  EXPORT DATA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Export object as .RData
-save(zif, file = './ZIF-Fisheries-2010-2015/Data/Biotic/zif.RData')
-save(zifSp, file = './ZIF-Fisheries-2010-2015/Data/Biotic/zifSp.RData')
+save(zif, file = './BioticData/ZIF-Fisheries-2010-2015/Data/Biotic/zif.RData')
+save(zifSp, file = './BioticData/ZIF-Fisheries-2010-2015/Data/Biotic/zifSp.RData')

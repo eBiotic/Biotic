@@ -174,4 +174,4 @@ removeTaxa <- c(
 )
 
 
-save(removeTaxa, file = './SpeciesFormatting/Data/removeTaxa.RData')
+save(removeTaxa, file = './BioticData/SpeciesFormatting/Data/removeTaxa.RData')

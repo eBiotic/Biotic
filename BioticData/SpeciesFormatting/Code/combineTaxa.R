@@ -215,4 +215,4 @@ combineTaxa <- c(
   'Lampanyctus sp. | Lampanyctus macdonaldi'
 )
 
-save(combineTaxa, file = './SpeciesFormatting/Data/combineTaxa.RData')
+save(combineTaxa, file = './BioticData/SpeciesFormatting/Data/combineTaxa.RData')

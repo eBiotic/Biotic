@@ -12,7 +12,7 @@ library(tidyverse)
 # For more information read the repo's README.md document.
 
 # Output location for downloaded data
-output <- './Peche_sentinelle_2011-2015/Data/RawData'
+output <- './BioticData/Peche_sentinelle_2011-2015/Data/RawData'
 
 # Data will need to be archived to Zenodo with restricted access and downloaded
 # using an access token.
@@ -77,7 +77,7 @@ sentFix <- sentFix[!sentFix$N_EspSci == '', ]
 
 # Transforming ddmm.%% to degree decimals
 # See dmsTOdd() for more information
-source('./Peche_sentinelle_2011-2015/Code/dmsTOdd.R')
+source('./BioticData/Peche_sentinelle_2011-2015/Code/dmsTOdd.R')
 sentFix[, "LaLevFx"] <- unlist(lapply(X = sentFix[, "LaLevFx"], FUN = dmsTOdd))
 sentFix[, "LoLevFX"] <- unlist(lapply(X = sentFix[, "LoLevFX"], FUN = dmsTOdd, type = 'long'))
 
@@ -87,7 +87,7 @@ sentFix[, "LoLevFX"] <- unlist(lapply(X = sentFix[, "LoLevFX"], FUN = dmsTOdd, t
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # All information in './SpeciesFormatting/Code/removeTaxa.R'
 # source('./SpeciesFormatting/Code/removeTaxa.R')
-load('./SpeciesFormatting/Data/removeTaxa.RData')
+load('./BioticData/SpeciesFormatting/Data/removeTaxa.RData')
 # zifSp <- zifSp[!zifSp$species %in% removeTaxa, ] # Remove from species list
 sentFix <- sentFix[!sentFix$N_EspSci %in% removeTaxa, ] # Remove from dataset
 
@@ -97,7 +97,7 @@ sentFix <- sentFix[!sentFix$N_EspSci %in% removeTaxa, ] # Remove from dataset
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Which taxa should be combined?
 # All information in './SpeciesFormatting/Code/combineTaxa.R'
-load('./SpeciesFormatting/Data/combineTaxa.RData')
+load('./BioticData/SpeciesFormatting/Data/combineTaxa.RData')
 
 # Transform as list
 combineTaxa <- str_split(combineTaxa, ' \\| ')
@@ -170,5 +170,5 @@ sentFix <- sentFix %>%
 #                                  EXPORT DATA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Export object as .RData
-save(sentFix, file = './Peche_sentinelle_2011-2015/Data/Biotic/SentinelleFixed.RData')
-save(sentSp, file = './Peche_sentinelle_2011-2015/Data/Biotic/SentinelleFixedSP.RData')
+save(sentFix, file = './BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleFixed.RData')
+save(sentSp, file = './BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleFixedSP.RData')

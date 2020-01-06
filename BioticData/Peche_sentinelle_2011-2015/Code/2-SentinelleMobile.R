@@ -12,7 +12,7 @@ library(tidyverse)
 # For more information read the repo's README.md document.
 
 # Output location for downloaded data
-output <- './Peche_sentinelle_2011-2015/Data/RawData'
+output <- './BioticData/Peche_sentinelle_2011-2015/Data/RawData'
 
 # Data will need to be archived to Zenodo with restricted access and downloaded
 # using an access token.
@@ -82,7 +82,7 @@ sentMobQC$DatDeTow <- as.Date(sentMobQC$DatDeTo)
 
 # Transforming ddmm.%% to degree decimals
 # See dmsTOdd() for more information
-source('./Peche_sentinelle_2011-2015/Code/dmsTOdd.R')
+source('./BioticData/Peche_sentinelle_2011-2015/Code/dmsTOdd.R')
 sentMobQC[, "LaDeTow"] <- unlist(lapply(X = sentMobQC[, "LaDeTow"], FUN = dmsTOdd))
 sentMobQC[, "LoDeTow"] <- unlist(lapply(X = sentMobQC[, "LoDeTow"], FUN = dmsTOdd, type = 'long'))
 sentMobQC[, "LaFiTow"] <- unlist(lapply(X = sentMobQC[, "LaFiTow"], FUN = dmsTOdd))
@@ -108,7 +108,7 @@ sentMob <- sentMob[!sentMob$N_EspSci == '', ]
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # All information in './SpeciesFormatting/Code/removeTaxa.R'
 # source('./SpeciesFormatting/Code/removeTaxa.R')
-load('./SpeciesFormatting/Data/removeTaxa.RData')
+load('./BioticData/SpeciesFormatting/Data/removeTaxa.RData')
 sentMob <- sentMob[!sentMob$N_EspSci %in% removeTaxa, ] # Remove from dataset
 
 
@@ -117,7 +117,7 @@ sentMob <- sentMob[!sentMob$N_EspSci %in% removeTaxa, ] # Remove from dataset
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Which taxa should be combined?
 # All information in './SpeciesFormatting/Code/combineTaxa.R'
-load('./SpeciesFormatting/Data/combineTaxa.RData')
+load('./BioticData/SpeciesFormatting/Data/combineTaxa.RData')
 
 # Transform as list
 combineTaxa <- str_split(combineTaxa, ' \\| ')
@@ -201,5 +201,5 @@ sentMob <- sentMob %>%
 #                                  EXPORT DATA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Export object as .RData
-save(sentMob, file = './Peche_sentinelle_2011-2015/Data/Biotic/SentinelleMobile.RData')
-save(sentMobSp, file = './Peche_sentinelle_2011-2015/Data/Biotic/SentinelleMobileSP.RData')
+save(sentMob, file = './BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleMobile.RData')
+save(sentMobSp, file = './BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleMobileSP.RData')

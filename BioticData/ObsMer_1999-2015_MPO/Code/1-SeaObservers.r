@@ -12,7 +12,7 @@ library(stringr)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                 CUSTOM FUNCTIONS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-source('./ObsMer_1999-2015_MPO/code/dmsTOdd.R')
+source('./BioticData/ObsMer_1999-2015_MPO/code/dmsTOdd.R')
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -22,7 +22,7 @@ source('./ObsMer_1999-2015_MPO/code/dmsTOdd.R')
 # For more information read the repo's README.md document.
 
 # Output location for downloaded data
-output <- './ObsMer_1999-2015_MPO/Data/RawData'
+output <- './BioticData/ObsMer_1999-2015_MPO/Data/RawData'
 
 # Will have to upload the data on zenodo and eventually get the data from SLGO.
 # For now, I'm using the data downloaded manually from the website.
@@ -141,7 +141,7 @@ obs <- left_join(obs, obsSp[, 1:2], by = c('Sp_visee' = 'obsID')) %>%
 #                                 REMOVE TAXA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # All information in './SpeciesFormatting/Code/removeTaxa.R'
-load('./SpeciesFormatting/Data/removeTaxa.RData')
+load('./BioticData/SpeciesFormatting/Data/removeTaxa.RData')
 obs <- obs[!obs$Sp_capture %in% removeTaxa, ]
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -149,7 +149,7 @@ obs <- obs[!obs$Sp_capture %in% removeTaxa, ]
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Which taxa should be combined?
 # All information in './SpeciesFormatting/Code/combineTaxa.R'
-load('./SpeciesFormatting/Data/combineTaxa.RData')
+load('./BioticData/SpeciesFormatting/Data/combineTaxa.RData')
 
 # Transform as list
 combineTaxa <- str_split(combineTaxa, ' \\| ')
@@ -236,5 +236,5 @@ obs <- obs %>%
 #                                  EXPORT DATA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Export object as .RData
-save(obs, file = './ObsMer_1999-2015_MPO/Data/Biotic/SeaObserver.RData')
-save(obsSp, file = './ObsMer_1999-2015_MPO/Data/Biotic/SeaObserverSP.RData')
+save(obs, file = './BioticData/ObsMer_1999-2015_MPO/Data/Biotic/SeaObserver.RData')
+save(obsSp, file = './BioticData/ObsMer_1999-2015_MPO/Data/Biotic/SeaObserverSP.RData')

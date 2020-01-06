@@ -16,7 +16,7 @@ library(stringr)
 # For more information read the repo's README.md document.
 
 # Output location for downloaded data
-output <- './SudGolfe_RelevePluriSp_MPO/Data/RawData'
+output <- './BioticData/SudGolfe_RelevePluriSp_MPO/Data/RawData'
 
 # Will have to upload the data on zenodo and eventually get the data from SLGO.
 # For now, I'm using the data downloaded manually from the website.
@@ -168,7 +168,7 @@ sp <- sp[!id0, ]
 #                                 REMOVE TAXA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # All information in './SpeciesFormatting/Code/removeTaxa.R'
-load('./SpeciesFormatting/Data/removeTaxa.RData')
+load('./BioticData/SpeciesFormatting/Data/removeTaxa.RData')
 
 
 # spNames[!spNames[, 'N_EspSci'] %in% removeTaxa, ] # To visualize data removed
@@ -183,7 +183,7 @@ sp <- sp[!id0, ]
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Which taxa should be combined?
 # All information in './SpeciesFormatting/Code/combineTaxa.R'
-load('./SpeciesFormatting/Data/combineTaxa.RData')
+load('./BioticData/SpeciesFormatting/Data/combineTaxa.RData')
 
 # Transform as a list
 combineTaxa <- str_split(combineTaxa, ' \\| ')
@@ -251,5 +251,5 @@ sp <- st_as_sf(sp, coords = c('LoMid','LaMid'), crs = 4326) %>%
 #                                  EXPORT DATA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Export object as .RData
-save(sp, file = './SudGolfe_RelevePluriSp_MPO/Data/Biotic/SouthPluri.RData')
-save(spNames, file = './SudGolfe_RelevePluriSp_MPO/Data/Biotic/SouthPluriSP.RData')
+save(sp, file = './BioticData/SudGolfe_RelevePluriSp_MPO/Data/Biotic/SouthPluri.RData')
+save(spNames, file = './BioticData/SudGolfe_RelevePluriSp_MPO/Data/Biotic/SouthPluriSP.RData')

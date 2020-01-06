@@ -21,7 +21,7 @@ library(stringr)
 # For more information read the repo's README.md document.
 
 # Output location for downloaded data
-output <- './Combine_RelevePluriSp_MPO/Data/RawData'
+output <- './BioticData/Combine_RelevePluriSp_MPO/Data/RawData'
 
 # Will have to upload the data on zenodo and eventually get the data from SLGO.
 # For now, I'm using the data downloaded manually from the website.
@@ -29,10 +29,10 @@ output <- './Combine_RelevePluriSp_MPO/Data/RawData'
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                   IMPORT DATA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-load('./SudGolfe_RelevePluriSp_MPO/Data/Biotic/SouthPluri.RData')
-load('./SudGolfe_RelevePluriSp_MPO/Data/Biotic/SouthPluriSP.RData')
-load('./NordGolfe_RelevePluriSp_MPO/Data/Biotic/NorthPluri.RData')
-load('./NordGolfe_RelevePluriSp_MPO/Data/Biotic/NorthPluriSP.RData')
+load('./BioticData/SudGolfe_RelevePluriSp_MPO/Data/Biotic/SouthPluri.RData')
+load('./BioticData/SudGolfe_RelevePluriSp_MPO/Data/Biotic/SouthPluriSP.RData')
+load('./BioticData/NordGolfe_RelevePluriSp_MPO/Data/Biotic/NorthPluri.RData')
+load('./BioticData/NordGolfe_RelevePluriSp_MPO/Data/Biotic/NorthPluriSP.RData')
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -88,5 +88,5 @@ pluri <- rbind(np, sp)
 #                                  EXPORT DATA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Export object as .RData
-save(pluri, file = './Combine_RelevePluriSp_MPO/Data/CombinePluri.RData')
-save(spList, file = './Combine_RelevePluriSp_MPO/Data/CombinePluriSP.RData')
+save(pluri, file = './BioticData/Combine_RelevePluriSp_MPO/Data/CombinePluri.RData')
+save(spList, file = './BioticData/Combine_RelevePluriSp_MPO/Data/CombinePluriSP.RData')
