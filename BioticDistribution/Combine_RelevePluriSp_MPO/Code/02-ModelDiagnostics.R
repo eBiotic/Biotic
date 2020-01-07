@@ -9,7 +9,7 @@
 #    3. Producing posterior summaries
 #    4. Variance partitioning
 #    5. Computing the explanatory power of the model
-#    6. Generating predictions for validation data
+#    6. Cross-valitdation
 
 
 # Libraries
@@ -143,7 +143,7 @@ abline(h = R2comm, col = "blue", lwd = 2)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 6. GENERATING PREDICTIONS FOR VALIDATION DATA
+# 6. Cross-validation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 source('BioticDistribution/Functions/crossValid.R')
 modelAUC <- crossValidation(data = biotic,  nCV = 20, validPct = 0.2)
