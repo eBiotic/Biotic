@@ -38,3 +38,5 @@ vignettes/*.pdf
 
 ## Data
 Environment/Environment.RData
+BioticDistribution/Combine_RelevePluriSp_MPO/Data/modelHSMC.RData
+BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHSMC.RData
