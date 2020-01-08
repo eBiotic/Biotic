@@ -8,15 +8,10 @@
 #    1. Environmental data
 #    2. Biotic data
 #    3. Intersect biotic with environmental
-#    4. Remove species below minimum record number (50)
-#    5. Format data for HMSC analysis
-#    6. Monte Carlo Markoc Chain sampling
-#    7. Producing MCMC trace and density plots
-#    8. Producing posterior summaries
-#    9. Variance partitioning
-#   10. Variance partitioning for individual parameters (species diagnotics)
-#   11. Computing the explanatory power of the model
-#   12. Generating predictions for validation data
+#    4. Select & format environmental data
+#    5. Remove species below minimum record number (50)
+#    6. Format data for HMSC analysis
+#    7. Monte Carlo Markoc Chain sampling
 
 
 # Libraries
@@ -52,7 +47,71 @@ biotic <- biotic[!uid, ]
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 4. REMOVE SPECIES BELOW MINIMUM RECORD NUMBER
+# 4. Select & format environmental data
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------
+# Sea surface temperatures
+# ------------------------
+# The northern survey is conducted in August
+# The southern survey is conducted in September
+# Identify survey (perhaps I should leave this obvious in the dataset...)
+Releve <- stringr::str_split(biotic$surveyID, '-') %>%
+          unlist() %>%
+          .[seq(1,length(.), by = 2)]
+
+# Empty vectors
+biotic$sst <- NA
+biotic$sstSD <- NA
+
+# Northern survey
+uid <- Releve %in% c('8','9','10','11','12')
+np <- paste('sst', c('2013','2014','2015','2016','2017'), '08', sep = '-')
+biotic$sst[uid] <- rowMeans(biotic[uid, np, drop = T], na.rm = T)
+biotic$sstSD[uid] <- apply(biotic[uid, np, drop = T], 1, sd, na.rm = T)
+
+# Southern survey
+uid <- !uid
+sp <- paste('sst', c('2013','2014','2015','2016','2017'), '09', sep = '-')
+biotic$sst[uid] <- rowMeans(biotic[uid, sp, drop = T], na.rm = T)
+biotic$sstST[uid] <- apply(biotic[uid, sp, drop = T], 1, sd, na.rm = T)
+
+# WARNING: Remplacer les SD == NA par 0 (pour éviter de predre des données)
+biotic$sstSD[is.na(biotic$sstSD)] <- 0
+
+# -----------------------
+# Sea bottom temperatures
+# -----------------------
+# This layer is annual, so I only need the mean value
+uid <- paste('sbt', c('2013','2014','2015'), sep = '-')
+biotic$sbt <- rowMeans(biotic[, uid, drop = T], na.rm = T)
+biotic$sbtSD <- apply(biotic[, uid, drop = T], 1, sd, na.rm = T)
+
+# WARNING: Remplacer les SD == NA par 0 (pour éviter de predre des données)
+biotic$sbtSD[is.na(biotic$sbtSD)] <- 0
+
+
+# -----------------------
+# Cold intermediate layer
+# -----------------------
+# This layer is annual, so I only need the mean value
+uid <- paste('cil', c('2013','2014','2015','2016','2017'), sep = '-')
+biotic$cil <- rowMeans(biotic[, uid, drop = T], na.rm = T)
+biotic$cilSD <- apply(biotic[, uid, drop = T], 1, sd, na.rm = T)
+
+# WARNING: Remplacer les SD == NA par 0 (pour éviter de predre des données)
+biotic$cilSD[is.na(biotic$cilSD)] <- 0
+
+
+# It is however not everywhere in the St. Lawrence and the HMSC algorithm does
+# not accept NAs in the values.
+# I therefore transform the NAs to -9, which is an impossible value
+# WARNING: This may need to be revisited at some point
+uid <- is.na(biotic$cil)
+biotic$cil[uid] <- biotic$cilSD[uid] <- -9
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 5. REMOVE SPECIES BELOW MINIMUM RECORD NUMBER
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Minimum record number accepted (subjective)
 minRec <- 50
@@ -74,7 +133,7 @@ biotic <- biotic[uid, ]
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 5. FORMAT DATA FOR HMSC ANALYSIS
+# 6. FORMAT DATA FOR HMSC ANALYSIS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ------------
 # Long to wide
@@ -119,8 +178,7 @@ Releve <- stringr::str_split(Station, '-') %>%
 
 # Pi data
 Pi <- data.frame(sampling_unit = Station,
-                 survey_number = Releve,
-                 stringsAsFactors = F)
+                 survey_number = Releve)
 
 
 # ----------------------------------------------------
@@ -128,12 +186,12 @@ Pi <- data.frame(sampling_unit = Station,
 # ----------------------------------------------------
 # Create a matrix for the values of environmental covariates at each sampling unit location
 # Environmental variables
-envCov <- c('Bathy_Mean','SSAL_MEAN','SalMoyMoy','sst-2017-08','sbt',#'cil-2017',
-            'sat','y','x')
+envCov <- c('Bathy_Mean','SSAL_MEAN','SalMoyMoy','sst','sbt','cil','sstSD','cilSD','sbtSD',
+            'sat','latitude_st','longitude_st')
 
 # Groups of environmental covariables, for variance partitioning
-envGroup <- c('Intercept','Bathymetry','Salinity','Salinity',#'Temperature',
-              'Temperature','Temperature','Oxygen', 'Spatial', 'Spatial')
+envGroup <- c('Intercept','Bathymetry','Salinity','Salinity','Temperature','Temperature','Temperature','Temperature',
+              'Temperature','Temperature', 'Oxygen', 'Spatial', 'Spatial')
 
 # The values have to be numeric
 X <- biotic[, envCov]
@@ -156,18 +214,7 @@ uid <- apply(X, 2, is.na) %>%
 # Subset datasets
 Y <- Y[!uid, ]
 X <- X[!uid, ]
-Pi <- Pi[!uid, ]
-
-# Other subset
-# uid <- Pi$survey_number %in% c('8','9','10','11','12')
-# Y <- Y[uid, ]
-# X <- X[uid, ]
-# Pi <- Pi[uid, ]
-
-# Transform Pi data as factors (for HMSC analysis)
-Pi <- apply(Pi, 2, as.factor) %>%
-      as.data.frame()
-
+Pi <- droplevels(Pi[!uid, ])
 
 # ----------------------------
 # as.HMSCdata for HMSC package
@@ -180,13 +227,13 @@ biotic <- HMSC::as.HMSCdata(Y = Y, X = X, Random = Pi, interceptX = TRUE, scaleX
 save(biotic, file = 'BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHMSC.RData')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 6. MONTE CARLO MARKOV CHAIN SAMPLING
+# 7. MONTE CARLO MARKOV CHAIN SAMPLING
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Sampling of posterior distribution
 model <- HMSC::hmsc(biotic,
                     family = "probit",
-                    niter = 100000, # 100000,
-                    nburn = 1000, # 1000,
+                    niter = 5000, # 100000,
+                    nburn = 100, # 1000,
                     thin = 10) # 100)
 
 # save model
