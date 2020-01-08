@@ -13,9 +13,9 @@
 
 # Libraries
 library(magrittr)
-# library(tidyverse)
+library(tidyverse)
 library(HMSC)
-# library(sf)
+library(sf)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 1. HMSC data & model
@@ -100,9 +100,28 @@ pred <- vector('list', nrow(uid))
 
 # Predictions
 for(i in 1:nrow(uid)) {
+  cat(i, '\r')
   # New data
   dat <- dataPred(X, Pi, uid[i, ])
 
   # Predictions
   pred[[i]] <- predict(model, newdata = dat)
-} 
+}
+
+# Single object
+pred <- do.call(rbind, pred)
+
+# Data.frame
+pred <- as.data.frame(pred)
+
+# Add colnames
+colnames(pred) <- sp
+
+# Add ID
+pred$ID <- as.character(Pi$sampling_unit)
+
+# Join with grid
+distPluri <- data.frame(ID = env$ID, stringsAsFactors = F) %>%
+             left_join(., pred, by = 'ID')
+
+save(distPluri, file = './BioticDistribution/Combine_RelevePluriSp_MPO/Data/DistributionPlurispecific.RData')
