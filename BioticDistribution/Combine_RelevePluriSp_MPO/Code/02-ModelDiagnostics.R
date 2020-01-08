@@ -20,8 +20,8 @@ library(HMSC)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 1. HMSC DATA & MODEL
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-load('./BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHSMC.RData')
-load('./BioticDistribution/Combine_RelevePluriSp_MPO/Data/modelHSMC.RData')
+load('./BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHMSC.RData')
+load('./BioticDistribution/Combine_RelevePluriSp_MPO/Data/modelHMSC.RData')
 
 # Parameters
 sp <- colnames(biotic$Y)

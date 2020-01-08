@@ -177,7 +177,7 @@ Pi <- apply(Pi, 2, as.factor) %>%
 biotic <- HMSC::as.HMSCdata(Y = Y, X = X, Random = Pi, interceptX = TRUE, scaleX = TRUE)
 
 # Export
-save(biotic, file = 'BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHSMC.RData')
+save(biotic, file = 'BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHMSC.RData')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 6. MONTE CARLO MARKOV CHAIN SAMPLING
@@ -190,4 +190,4 @@ model <- HMSC::hmsc(biotic,
                     thin = 10) # 100)
 
 # save model
-save(model, file = './BioticDistribution/Combine_RelevePluriSp_MPO/Data/modelHSMC.RData')
+save(model, file = './BioticDistribution/Combine_RelevePluriSp_MPO/Data/modelHMSC.RData')
