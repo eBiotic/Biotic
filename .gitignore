@@ -37,7 +37,7 @@ vignettes/*.pdf
 .DS_Store
 
 ## Data
-## Environment/Environment.RData
+Environment/Environment.RData
 BioticDistribution/Combine_RelevePluriSp_MPO/Data/modelHMSC.RData
 BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHMSC.RData
 BioticDistribution/Combine_RelevePluriSp_MPO/Data/DistributionPlurispecific.RData

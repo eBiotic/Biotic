@@ -64,7 +64,8 @@ sp <- sp %>%
              year = as.character(year),
              month = as.character(month),
              day = as.character(day),
-             month = gsub('\\b9\\b', '09',month)) %>%
+             month = gsub('\\b9\\b', '09',month),
+             releve = 'South') %>%
       select(-vessel, -cruise, -set, -strat, -time, -duration, -EspGen)
 
 # Format north pluri data
@@ -73,7 +74,8 @@ np <- np %>%
              month = format(DatDeTow,"%m"),
              day = format(DatDeTow,"%d")) %>%
       mutate(surveyID = paste(No_Rel, No_Stn, sep = '-'),
-             presence = 1) %>%
+             presence = 1,
+             releve = 'North') %>%
       select(-No_Rel, -No_Stn, -EspGen, -N_EspF, -Source, -Nbpc, -DatFiTow,
              -EngGen, -Resul, -HreDeb, -HreFin, -Prof_1, -Prof_2, -WCapOri,
              -DatDeTow, -SNb_Capt) %>%
