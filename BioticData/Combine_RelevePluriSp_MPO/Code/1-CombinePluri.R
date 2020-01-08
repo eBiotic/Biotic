@@ -60,7 +60,11 @@ spList <- data.frame(species = unique(c(spNames$N_EspSci, npNames$N_EspSci)),
 sp <- sp %>%
       rename(species = N_EspSci,
              presence = Presence) %>%
-      mutate(surveyID = paste(cruise, set, sep = '-')) %>%
+      mutate(surveyID = paste(cruise, set, sep = '-'),
+             year = as.character(year),
+             month = as.character(month),
+             day = as.character(day),
+             month = gsub('\\b9\\b', '09',month)) %>%
       select(-vessel, -cruise, -set, -strat, -time, -duration, -EspGen)
 
 # Format north pluri data
