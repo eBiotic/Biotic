@@ -11,6 +11,7 @@
 #    5. Computing the explanatory power of the model
 #    6. Cross-valitdation
 
+# source('BioticDistribution/Combine_RelevePluriSp_MPO/Code/01-PluriDistribution.R')
 
 # Libraries
 # library(magrittr)
@@ -31,7 +32,7 @@ nParam <- length(envCov)
 
 # Groups of environmental covariables, for variance partitioning
 # WARNING: Not reproducible
-envGroup <- c('Intercept','Bathymetry','Salinity','Salinity','Temperature','Temperature','Temperature','Temperature',
+envGroup <- c('Intercept','Bathymetry','Salinity','Salinity','Temperature',
               'Temperature','Temperature', 'Oxygen', 'Spatial', 'Spatial')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
