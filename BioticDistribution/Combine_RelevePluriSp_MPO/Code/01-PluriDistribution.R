@@ -62,22 +62,16 @@ biotic <- biotic[!uid, ]
 # The southern survey is conducted in September
 # Empty vectors
 biotic$sst <- NA
-# biotic$sstSD <- NA
 
 # Northern survey
 uid <- biotic$releve == 'North'
 np <- paste('sst', c('2013','2014','2015','2016','2017'), '08', sep = '-')
 biotic$sst[uid] <- rowMeans(biotic[uid, np, drop = T], na.rm = T)
-# biotic$sstSD[uid] <- apply(biotic[uid, np, drop = T], 1, sd, na.rm = T)
 
 # Southern survey
 uid <- !uid
 sp <- paste('sst', c('2013','2014','2015','2016','2017'), '09', sep = '-')
 biotic$sst[uid] <- rowMeans(biotic[uid, sp, drop = T], na.rm = T)
-# biotic$sstST[uid] <- apply(biotic[uid, sp, drop = T], 1, sd, na.rm = T)
-
-# # WARNING: Remplacer les SD == NA par 0 (pour éviter de predre des données)
-# biotic$sstSD[is.na(biotic$sstSD)] <- 0
 
 # -----------------------
 # Sea bottom temperatures
@@ -85,30 +79,6 @@ biotic$sst[uid] <- rowMeans(biotic[uid, sp, drop = T], na.rm = T)
 # This layer is annual, so I only need the mean value
 uid <- paste('sbt', c('2013','2014','2015'), sep = '-')
 biotic$sbt <- rowMeans(biotic[, uid, drop = T], na.rm = T)
-# biotic$sbtSD <- apply(biotic[, uid, drop = T], 1, sd, na.rm = T)
-
-# # WARNING: Remplacer les SD == NA par 0 (pour éviter de predre des données)
-# biotic$sbtSD[is.na(biotic$sbtSD)] <- 0
-
-
-# -----------------------
-# Cold intermediate layer
-# -----------------------
-# This layer is annual, so I only need the mean value
-uid <- paste('cil', c('2013','2014','2015','2016','2017'), sep = '-')
-biotic$cil <- rowMeans(biotic[, uid, drop = T], na.rm = T)
-# biotic$cilSD <- apply(biotic[, uid, drop = T], 1, sd, na.rm = T)
-
-# # WARNING: Remplacer les SD == NA par 0 (pour éviter de predre des données)
-# biotic$cilSD[is.na(biotic$cilSD)] <- 0
-
-
-# It is however not everywhere in the St. Lawrence and the HMSC algorithm does
-# not accept NAs in the values.
-# I therefore transform the NAs to -9, which is an impossible value
-# WARNING: This may need to be revisited at some point
-uid <- is.na(biotic$cil)
-biotic$cil[uid] <- -9
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,13 +116,6 @@ biotic <- biotic[uid, ]
 biotic <- st_drop_geometry(biotic) %>%
           tidyr::spread(species, presence, fill = 0)
 
-# WARNING: delete
-# x <- biotic
-# uid <- biotic$releve == 'North'
-# biotic <- biotic[uid, ]
-# uid <- names(which(colSums(biotic[, sp$species]) == 0))
-# biotic <- biotic[,uid]
-
 # ---------------------------------
 # Y: sample units by species matrix
 # ---------------------------------
@@ -170,7 +133,6 @@ Y <- apply(Y, 2, as.numeric)
 # Add unique ID as column name
 Station <- biotic$surveyID
 rownames(Y) <- Station
-# rownames(Y) <- paste0('site', 1:length(Station))
 
 
 # -----------------------------------------
@@ -180,7 +142,6 @@ rownames(Y) <- Station
 # Using survey number, which correspond to years, as a random effect in the analysis
 # Ultimately, there is likely a correlation between stations done during a single year in a single strata
 # It would be a good thing to analyze spatial dependence between stations
-# Pi data
 Pi <- data.frame(sampling_unit = Station,
                  survey = biotic$releve)
 
@@ -192,32 +153,21 @@ Pi <- data.frame(sampling_unit = Station,
 # Environmental variables
 envCov <- c('Bathy_Mean',
             'SSAL_MEAN','SalMoyMoy',
-            'sst','sbt',#'cil',
+            'sst','sbt',
             'ARAG','Present.Surface.pH.tif',
             'sat','Present.Surface.Dissolved.oxygen.Mean',
             'Present.Benthic.Mean.Depth.Primary.productivity.Mean','Present.Surface.Primary.productivity.Mean',
             'Y','X')
 
-envGroup <- c('Intercept', 'Bathymetry',
-              'Salinity','Salinity',
-              'Temperature','Temperature',#'Temperature',
-              'pH', 'pH',
-              'Oxygen','Oxygen',
-              'Productivity','Productivity',
-              'Spatial','Spatial')
-
 # The values have to be numeric
 X <- biotic[, envCov]
-# X$releve <- as.factor(X$releve)
-# X$releve <- as.numeric(as.factor(X$releve))
 
 # Make sure all columns are numeric
 X <- apply(X, 2, as.numeric)
 
 # Add unique ID as column name
 rownames(X) <- Station
-# rownames(X) <- paste0('site', 1:length(Station))
-# colnames(X) <- paste0('env', 1:ncol(X))
+
 
 # ----------------------------------------
 # Remove any values with environmental NAs
@@ -235,9 +185,8 @@ Pi <- droplevels(Pi[!uid, ])
 # as.HMSCdata for HMSC package
 # ----------------------------
 # Creating HMSC dataset for analyses
-# biotic <- HMSC::as.HMSCdata(Y = Y, X = X, Random = Pi, interceptX = T, scaleX = T)
 biotic <- HMSC::as.HMSCdata(Y = Y, X = X, Random = Pi, interceptX = TRUE, scaleX = TRUE)
-# biotic$X[,'releve'] <- as.factor(biotic$X[,'releve'])
+
 # Export
 save(biotic, file = 'BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHMSC.RData')
 
@@ -247,9 +196,9 @@ save(biotic, file = 'BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHMSC.
 # Sampling of posterior distribution
 model <- HMSC::hmsc(biotic,
                     family = "probit",
-                    niter = 2000, # 100000,
-                    nburn = 100, # 1000,
-                    thin = 10) # 100)
+                    niter = 100000, # 100000,
+                    nburn = 1000, # 1000,
+                    thin = 100) # 100)
 
 # save model
 save(model, file = './BioticDistribution/Combine_RelevePluriSp_MPO/Data/modelHMSC.RData')

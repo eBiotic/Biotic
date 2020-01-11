@@ -34,7 +34,7 @@ nParam <- length(envCov)
 # WARNING: Not reproducible
 envGroup <- c('Intercept', 'Bathymetry',
               'Salinity','Salinity',
-              'Temperature','Temperature','Temperature',
+              'Temperature','Temperature',
               'pH', 'pH',
               'Oxygen','Oxygen',
               'Productivity','Productivity',

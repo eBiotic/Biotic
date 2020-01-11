@@ -36,11 +36,6 @@ nParam <- length(envCov)
 load('./Environment/Environment.RData')
 
 # ------------------------
-# Bathymetry
-# ------------------------
-
-
-# ------------------------
 # Sea surface temperatures
 # ------------------------
 # The northern survey is conducted in August
@@ -65,20 +60,6 @@ env$sst[uid] <- rowMeans(env[uid, sp, drop = T], na.rm = T)
 # This layer is annual, so I only need the mean value
 uid <- paste('sbt', c('2013','2014','2015'), sep = '-')
 env$sbt <- rowMeans(env[, uid, drop = T], na.rm = T)
-
-# -----------------------
-# Cold intermediate layer
-# -----------------------
-# This layer is annual, so I only need the mean value
-uid <- paste('cil', c('2013','2014','2015','2016','2017'), sep = '-')
-env$cil <- rowMeans(env[, uid, drop = T], na.rm = T)
-
-# It is however not everywhere in the St. Lawrence and the HMSC algorithm does
-# not accept NAs in the values.
-# I therefore transform the NAs to -9, which is an impossible value
-# WARNING: This may need to be revisited at some point
-uid <- is.na(env$cil)
-env$cil[uid] <- -9
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,8 +119,6 @@ r1 <- seq(1, nP, by = 1000)
 r2 <- c(seq(1000, nP, by = 1000), nP)
 uid <- cbind(r1,r2)
 
-uid <- seq(1,nP, by = 100)
-
 # List to store results
 pred <- vector('list', nrow(uid))
 
@@ -152,6 +131,7 @@ for(i in 1:nrow(uid)) {
   # Predictions
   pred[[i]] <- predict(model, newdata = dat)
 }
+
 
 # Single object
 pred <- do.call(rbind, pred)
