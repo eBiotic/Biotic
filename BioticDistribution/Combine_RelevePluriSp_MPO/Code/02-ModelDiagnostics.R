@@ -32,8 +32,13 @@ nParam <- length(envCov)
 
 # Groups of environmental covariables, for variance partitioning
 # WARNING: Not reproducible
-envGroup <- c('Intercept','Bathymetry','Salinity','Salinity','Temperature',
-              'Temperature','Temperature', 'Oxygen', 'Spatial', 'Spatial')
+envGroup <- c('Intercept', 'Bathymetry',
+              'Salinity','Salinity',
+              'Temperature','Temperature','Temperature',
+              'pH', 'pH',
+              'Oxygen','Oxygen',
+              'Productivity','Productivity',
+              'Spatial','Spatial')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 2. PRODUCING THE MCMC TRACE AND DENSITY PLOTS

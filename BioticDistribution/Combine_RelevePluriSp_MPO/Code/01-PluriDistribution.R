@@ -27,7 +27,7 @@ load('./eDriversGrids/Data/HexaGrid-1000m2.RData')
 env <- dplyr::left_join(egslGrid, env, by = 'ID')
 
 # Remove x,y column, use that of biotic data instead
-env <- env[, !colnames(env) %in% c('x','y')]
+env <- env[, !colnames(env) %in% c('X','Y')]
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 2. LOAD BIOTIC DATA
@@ -38,8 +38,8 @@ rm(pluri)
 
 # Rename xy column
 biotic <- biotic %>%
-          rename(x = longitude_st,
-                 y = latitude_st)
+          rename(X = longitude_st,
+                 Y = latitude_st)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 3. INTERSECT BIOTIC W/ ENVIRONMENTAL DATA
@@ -190,12 +190,21 @@ Pi <- data.frame(sampling_unit = Station,
 # ----------------------------------------------------
 # Create a matrix for the values of environmental covariates at each sampling unit location
 # Environmental variables
-envCov <- c('Bathy_Mean','SSAL_MEAN','SalMoyMoy','sst','sbt','cil',
-            'sat','y','x')
+envCov <- c('Bathy_Mean',
+            'SSAL_MEAN','SalMoyMoy',
+            'sst','sbt',#'cil',
+            'ARAG','Present.Surface.pH.tif',
+            'sat','Present.Surface.Dissolved.oxygen.Mean',
+            'Present.Benthic.Mean.Depth.Primary.productivity.Mean','Present.Surface.Primary.productivity.Mean',
+            'Y','X')
 
-# Groups of environmental covariables, for variance partitioning
-envGroup <- c('Intercept','Bathymetry','Salinity','Salinity','Temperature',
-              'Temperature','Temperature', 'Oxygen', 'Spatial', 'Spatial')
+envGroup <- c('Intercept', 'Bathymetry',
+              'Salinity','Salinity',
+              'Temperature','Temperature',#'Temperature',
+              'pH', 'pH',
+              'Oxygen','Oxygen',
+              'Productivity','Productivity',
+              'Spatial','Spatial')
 
 # The values have to be numeric
 X <- biotic[, envCov]
