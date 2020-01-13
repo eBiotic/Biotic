@@ -124,7 +124,7 @@ pred <- vector('list', nrow(uid))
 
 # Predictions
 for(i in 1:nrow(uid)) {
-  cat(i, '\r')
+  cat(i, ' of ', nrow(uid), '\r')
   # New data
   dat <- dataPred(X, Pi, uid[i, ])
 
@@ -140,7 +140,7 @@ pred <- do.call(rbind, pred)
 pred <- as.data.frame(pred)
 
 # Add colnames
-colnames(pred) <- sp
+colnames(pred) <- colnames(biotic$Y)
 
 # Add ID
 pred$ID <- as.character(Pi$sampling_unit)

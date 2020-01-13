@@ -125,7 +125,6 @@ biotic <- st_drop_geometry(biotic) %>%
 # The biotic data has, in theory, already a column name called `surveyID`
 # Y <- biotic[, sp$species[!sp$species %in% uid]]
 Y <- biotic[, sp$species]
-# colnames(Y) <- sp[,'ID']
 
 # Make sure all columns are numeric
 Y <- apply(Y, 2, as.numeric)
