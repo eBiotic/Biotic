@@ -38,11 +38,7 @@ vignettes/*.pdf
 
 ## Data
 Environment/Environment.RData
-BioticDistribution/Combine_RelevePluriSp_MPO/Data/modelHMSC.RData
-BioticDistribution/Combine_RelevePluriSp_MPO/Data/dataHMSC.RData
-BioticDistribution/Combine_RelevePluriSp_MPO/Data/DistributionPlurispecific.RData
-BioticDistribution/ZIF-Fisheries-2010-2015/Data/dataHMSC.RData
-BioticDistribution/ZIF-Fisheries-2010-2015/Data/modelHMSC.RData
-BioticDistribution/ZIF-Fisheries-2010-2015/Data/DistributionZIF-Chalut.RData
-BioticDistribution/BIOMOD/Data/envRasters.RData
-BioticDistribution/BIOMOD/Data/SDM.RData
+BioticDistribution/Combine_RelevePluriSp_MPO/Data/
+BioticDistribution/ZIF-Fisheries-2010-2015/Data/
+BioticDistribution/BIOMOD/Data/
+BioticDistribution/GLM/Data/
