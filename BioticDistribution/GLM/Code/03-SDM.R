@@ -136,6 +136,7 @@ sp <- sp %>%
 
 # Prediction stack
 spPred <- stack(spPred)
+spPred <- round(spPred, 6)
 names(spPred) <- sp$species
 # plot(spPred, zlim = c(0,1))
 
@@ -161,7 +162,6 @@ rich <- calc(bin, sum, na.rm = T)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Export
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-save(spDist, file = './BioticDistribution/GLM/Data/modelGLM.RData')
 save(spPred, file = './BioticDistribution/GLM/Data/predictionGLM.RData')
 save(R2, file = './BioticDistribution/GLM/Data/R2GLM.RData')
 save(bin, file = './BioticDistribution/GLM/Data/binariesGLM.RData')
