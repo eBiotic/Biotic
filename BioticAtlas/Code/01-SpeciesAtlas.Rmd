@@ -1,0 +1,147 @@
+---
+title: "Species distribution atlas for the Estuary and Gulf of St. Lawrence"
+author: David Beauchesne
+lang: en
+abstract:
+fontfamily: fourier
+linestretch: 1
+fontsize: 10pt
+lof: no
+output:
+pdf_document:
+    highlight: kate
+    toc: yes
+    toc_depth: 3
+    fig_caption: yes
+    keep_tex: yes
+    latex_engine: pdflatex
+    number_section: yes
+md_document:
+    variant: markdown_strict
+---
+
+<!-- rmarkdown::render(input = './BioticAtlas/Code/01-SpeciesAtlas.Rmd', 'pdf_document') -->
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<!-- Setting up the pipeline
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+```{r comment=">", echo = FALSE, eval = TRUE, include = FALSE}
+
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+#              Libraries
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+library(sf)
+library(magrittr)
+library(tidyverse)
+library(raster)
+
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+#             Biotic data
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+# Biotic data
+load('../../BioticData/Combine_RelevePluriSp_MPO/Data/CombinePluri.RData')
+load('../../BioticData/ObsMer_1999-2015_MPO/Data/Biotic/SeaObserver.RData')
+load('../../BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleFixed.RData')
+load('../../BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleMobile.RData')
+load('../../BioticData/ZIF-Fisheries-2010-2015/Data/Biotic/zif.RData')
+
+# Select single column
+pluri <- pluri[,'species']
+obs <- obs[,'species']
+sentFix <- sentFix[,'species']
+sentMob <- sentMob[,'species']
+zif <- zif[,'species']
+
+# Single object
+biotic <- rbind(pluri, obs, sentFix, sentMob, zif)
+
+
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+#             Species list
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+load('../../BioticData/SpeciesList/Data/SpeciesList.RData')
+
+# Minimum record number accepted (subjective)
+minRec <- 30
+
+# Filter
+sp <- sp %>%
+      filter(Count >= minRec)
+
+# Number of species
+nSp <- nrow(sp)
+
+# Biotic subset
+uid <- biotic$species %in% sp$species
+biotic <- biotic[uid, ]
+
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+#        Predicted distributions
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+load('../../BioticDistribution/GLM/Data/predictionGLM.RData')
+
+
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+#              Study area
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+load('../../eDriversGrids/Data/egslSimple.RData')
+
+
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+#            Color palette
+# -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+# colPal <- c("#c7cbce", "#96a3a3", "#687677", "#222d3d", "#25364a", "#c77f20",
+#             "#e69831", "#e3af16", "#e4be29", "#f2ea8b")
+# colPal <- c('#649DA7','#9FCED1','#CCBB96', '#E1BA6C','#B04D1A')
+# colPal <- c('#2C3154','#2F4A73','#2B8F9C','#58B79D','#D3AA45')
+# library(viridis)
+# colPal <- viridis_pal()(10)
+# rbPal <- colorRampPalette(c('#d7d7d7','#F2F4C8','#66BDBB','#294492','#883333'))
+# rbPal <- colorRampPalette(c('#1FAFEB','#45E7D7','#81FEB9','#BAEE96','#F9B86B','#FD6E42','#FC111D'))
+# rbPal <- colorRampPalette(c('#ffffff','#DBE1E1','#B8C9C6','#869E9B','#5A7475','#435259'))
+# rbPal <- colorRampPalette(c('#2C3154','#2F4A73','#2B8F9C','#58B79D','#D3AA45'))
+rbPal <- colorRampPalette(c('#e4ffff','#14808C','#085061','#692932','#fa6d6d'))
+```
+
+
+
+# Overview
+
+This document is an atlas of species distribution models for the Estuary and
+Gulf of St. Lawrence in Eastern Canada.
+
+```{r echo = FALSE, fig.height = 6, fig.width = 6, fig.align = 'center'}
+par(mar = c(0,0,0,0))
+plot(st_geometry(egslSimple))
+plot(st_geometry(biotic), pch = 20, cex = .1, col = '#5d5e5c', add = T)
+```
+
+\pagebreak
+
+
+```{r echo = FALSE, results = 'asis', fig.height = 6, fig.width = 12, fig.align = 'center'}
+# Loop through species
+for(i in 1:nSp) {
+  # Section title (taxa name)
+  cat('\n')
+  cat("#", paste(sp$species[i]), "\n")
+  cat('\n\n')
+
+  # -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+  #     Species empirical occurrences
+  # -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+  # Identify species in biotic data
+  uid <- biotic$species == sp$species[i]
+
+  # Plot empirical data
+  par(mfrow = c(1,2), mar = c(0,0,0,3.75))
+  plot(st_geometry(egslSimple))
+  plot(st_geometry(biotic[uid, ]), pch = 20, cex = .75, col = '#5d5e5c66', add = T)
+
+  # -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+  #    Species predicted distribution
+  # -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+  plot(spPred[[i]], col = rbPal(256), zlim = c(0,1), axes = F, box = F)
+  cat('\n\n\\pagebreak\n')
+}
+```
