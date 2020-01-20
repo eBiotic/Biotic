@@ -22,7 +22,8 @@ env$Bathy_Mean <- round(abs(env$Bathy_Mean))
 # ------------------------
 # Sea surface temperatures
 # ------------------------
-uid <- stringr::str_detect(colnames(env), 'sst')
+uid <- paste(paste('sst', c('2013','2014','2015','2016','2017'), sep = '-'), c(rep('08',5), rep('09',5)), sep = '-')
+# uid <- stringr::str_detect(colnames(env), 'sst')
 env$sst <- rowMeans(env[, uid, drop = T], na.rm = T)
 
 # -----------------------
@@ -101,7 +102,7 @@ biotic <- as(biotic, 'Spatial')
 load('BioticData/SpeciesList/Data/SpeciesList.RData')
 
 # Minimum record number accepted (subjective)
-minRec <- 50
+minRec <- 30
 
 # Filter
 sp <- sp %>%
@@ -145,7 +146,7 @@ dat@data[,1] <- 1
 
 # Biomod data
 SDMdata[[i]] <- BIOMOD_FormatingData(resp.var = dat,
-                                     expl.var = r,
+                                     expl.var = env[[envCov]],
                                      resp.name = sp$species[i],
                                      PA.nb.rep = 1)
 
@@ -157,7 +158,7 @@ SDMoption <- biomod2::BIOMOD_ModelingOptions()
 
 # SDM model
 SDMmodel[[i]] <- biomod2::BIOMOD_Modeling(data = SDMdata[[i]],
-                                          models = "GLM",
+                                          models = "RF",
                                           model.options = SDMoption)
 
 
@@ -171,14 +172,14 @@ SDMmodel[[i]] <- biomod2::BIOMOD_Modeling(data = SDMdata[[i]],
 # 1. BIOMOD2 projections
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 SDMproj[[i]] <- biomod2::BIOMOD_Projection(modeling.output = SDMmodel[[i]],
-                                          new.env = r,
+                                          new.env = env[[envCov]],
                                           proj.name = '-',
                                           selected.models = 'all',
                                           binary.meth = 'TSS',
                                           compress = 'xz',
                                           clamping.mask = F,
                                           output.format = '.grd')
-
+plot(SDMproj[[i]])
 SDM <- list(SDMdata, SDMmodel, SDMproj)
 save(SDM, file = './BioticDistribution/BIOMOD/Data/SDM.RData')
 }
