@@ -50,6 +50,9 @@ obsSp <- read.csv(file = paste0(output, '/Table_capturesOBS_19992015_especes.csv
 # obsSp$NOM_SCIENT_ESP <- gsub(' ', '_', obsSp$NOM_SCIENT_ESP)
 # obsSp$NOM_SCIENT_ESP <- gsub('\\.','', obsSp$NOM_SCIENT_ESP)
 
+# Remove data prior to 2010
+obs <- filter(obs, An > 2009)
+
 # Species that are not in species list (for simplicity's sake, remove them for now)
 obs <- obs[obs$Sp_capture %in% obsSp$COD_OBS, ]
 
@@ -59,7 +62,6 @@ obs[, "Longitude_deb"] <- unlist(lapply(X = obs[, "Longitude_deb"], FUN = dmsTOd
 obs[, "Latitude_fin"] <- unlist(lapply(X = obs[, "Latitude_fin"], FUN = dmsTOdd))
 obs[, "Longitude_fin"] <- unlist(lapply(X = obs[, "Longitude_fin"], FUN = dmsTOdd, type = 'long'))
 
-# Remove data prior to 2010
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                               NUMBER OF RECORDS
@@ -128,6 +130,7 @@ obsSp$species <- gsub('Staurophora mertensii','Staurostoma mertensii', obsSp$spe
 obsSp$species <- gsub('Tealia felina','Urticina felina', obsSp$species)
 obsSp$species <- gsub('Tetrapturus albidus','Kajikia albida', obsSp$species)
 obsSp$species <- gsub('Ulcina olrikii','Aspidophoroides olrikii', obsSp$species)
+obsSp$species <- gsub('Gasterosteus aculeatus','Gasterosteus aculeatus aculeatus', obsSp$species)
 
 # Add species names to obs dataset
 obs <- left_join(obs, obsSp[, 1:2], by = c('Sp_visee' = 'obsID')) %>%

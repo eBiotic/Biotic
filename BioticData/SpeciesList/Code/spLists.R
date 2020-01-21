@@ -12,3 +12,8 @@ sp <- rbind(spList, zifSp, obsSp) %>%
       as.data.frame()
 
 save(sp, file = './BioticData/SpeciesList/Data/SpeciesList.RData')
+
+
+
+load('BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleFixedSP.RData')
+load('BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleMobileSP.RData')
