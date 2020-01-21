@@ -37,7 +37,7 @@ vignettes/*.pdf
 .DS_Store
 
 ## Data
-Environment/Environment.RData
+Environment/Data
 BioticDistribution/Combine_RelevePluriSp_MPO/Data/
 BioticDistribution/ZIF-Fisheries-2010-2015/Data/
 BioticDistribution/BIOMOD/Data/
