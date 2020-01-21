@@ -77,18 +77,36 @@ save(r, file = './Environment/EnvironmentRaster.RData')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 1. LOAD BIOTIC DATA
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# =-=-=-=-=-=-=-=-=-= #
+#   Plurispecific
+# =-=-=-=-=-=-=-=-=-= #
+# Plurispecific survey: taking the absences in this dataset as true absences
 load('BioticData/Combine_RelevePluriSp_MPO/Data/CombinePluri.RData')
+
+# Remove duplicates, if any
+uid <- duplicated(pluri)
+pluri <- pluri[!uid, ]
+
+# Get absences
+pluri <- pluri %>%
+         tidyr::spread(species, presence, fill = 0) %>%
+         gather("species", "presence", -year, -month, -day, -latitude_st, -latitude_end, -longitude_st, -longitude_end, -surveyID, -releve, -geometry)
+
+# =-=-=-=-=-=-=-=-=-= #
+#   Other datasets
+# =-=-=-=-=-=-=-=-=-= #
 load('BioticData/ObsMer_1999-2015_MPO/Data/Biotic/SeaObserver.RData')
+obs <- filter(obs, year > 2009)
 load('BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleFixed.RData')
 load('BioticData/Peche_sentinelle_2011-2015/Data/Biotic/SentinelleMobile.RData')
 load('BioticData/ZIF-Fisheries-2010-2015/Data/Biotic/zif.RData')
 
 # Select single column
-pluri <- pluri[,'species']
-obs <- obs[,'species']
-sentFix <- sentFix[,'species']
-sentMob <- sentMob[,'species']
-zif <- zif[,'species']
+pluri <- pluri[,c('species', 'presence')]
+obs <- obs[,c('species', 'presence')]
+sentFix <- sentFix[,c('species', 'presence')]
+sentMob <- sentMob[,c('species', 'presence')]
+zif <- zif[,c('species', 'presence')]
 
 # Single object
 biotic <- rbind(pluri, obs, sentFix, sentMob, zif)
@@ -138,17 +156,17 @@ for(i in 1:nrow(sp)) {
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Subset data
 uid <- biotic$species == sp$species[i]
-dat <- biotic[uid, 'species']
+dat <- biotic[uid, 'presence']
 
-# Change data
-colnames(dat@data) <- sp$species[i]
-dat@data[,1] <- 1
+# # Change data
+# colnames(dat@data) <- sp$species[i]
+# dat@data[,1] <- 1
 
 # Biomod data
 SDMdata[[i]] <- BIOMOD_FormatingData(resp.var = dat,
                                      expl.var = env[[envCov]],
                                      resp.name = sp$species[i],
-                                     PA.nb.rep = 1)
+                                     PA.nb.rep = 0)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 1. BIOMOD2 Model
@@ -182,4 +200,11 @@ SDMproj[[i]] <- biomod2::BIOMOD_Projection(modeling.output = SDMmodel[[i]],
 plot(SDMproj[[i]])
 SDM <- list(SDMdata, SDMmodel, SDMproj)
 save(SDM, file = './BioticDistribution/BIOMOD/Data/SDM.RData')
+}
+
+
+for(i in 1:nrow(sp)) {
+uid <- biotic$species == sp$species[i]
+dat <- biotic[uid, 'presence']
+cat(sp$species[i], table(dat$presence), '\n')
 }
