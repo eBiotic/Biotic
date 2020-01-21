@@ -59,6 +59,7 @@ obs[, "Longitude_deb"] <- unlist(lapply(X = obs[, "Longitude_deb"], FUN = dmsTOd
 obs[, "Latitude_fin"] <- unlist(lapply(X = obs[, "Latitude_fin"], FUN = dmsTOdd))
 obs[, "Longitude_fin"] <- unlist(lapply(X = obs[, "Longitude_fin"], FUN = dmsTOdd, type = 'long'))
 
+# Remove data prior to 2010
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                               NUMBER OF RECORDS
