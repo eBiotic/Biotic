@@ -120,7 +120,7 @@ biotic <- as(biotic, 'Spatial')
 load('BioticData/SpeciesList/Data/SpeciesList.RData')
 
 # Minimum record number accepted (subjective)
-minRec <- 30
+minRec <- 50
 
 # Filter
 sp <- sp %>%
