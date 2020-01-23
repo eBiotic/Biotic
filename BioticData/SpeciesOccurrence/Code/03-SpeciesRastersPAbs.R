@@ -73,10 +73,9 @@ for(i in 1:length(sp)) {
               st_sample(size = samp) %>%
               st_sf() %>%
               mutate(presence = 0)
+    # Bind objects
+    dat <- rbind(dat, pseudo)
   }
-
-  # Bind objects
-  dat <- rbind(dat, pseudo)
 
   # Transform as sp object
   dat <- as(dat, 'Spatial')
