@@ -177,9 +177,11 @@ for(i in sp) {
 
 RF_classification_smooth <- stack(species)
 
+values(RF_classification_smooth) <- ceiling(values(RF_classification_smooth))
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Export
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 save(RF_regression_smooth, file = './BioticDistribution/RandomForest/Data/RandForest_Regression_Smooth.RData')
-save(RF_regression_smooth, file = './BioticDistribution/RandomForest/Data/RF_classification_smooth.RData')
+save(RF_classification_smooth, file = './BioticDistribution/RandomForest/Data/RandForest_Classification_Smooth.RData')
