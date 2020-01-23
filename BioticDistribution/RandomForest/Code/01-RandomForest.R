@@ -144,7 +144,12 @@ for(i in 1:nSp) {
 												vals = .)
 }
 
+# Create raster stack
 spPred <- stack(spPred)
+names(spPred) <- sp
+
+# Round values
+values(spPred) <- values(spPred) - 1
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 #          	 Export
