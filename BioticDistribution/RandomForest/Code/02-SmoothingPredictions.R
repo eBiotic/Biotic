@@ -7,42 +7,6 @@ library(raster)
 library(btb)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Load data
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# =-=-=-=-=-=-=-=-=-=-= #
-#      Study area
-# =-=-=-=-=-=-=-=-=-=-= #
-load('./eDriversGrids/Data/egslSimple.RData')
-
-
-# =-=-=-=-=-=-=-=-=-=-= #
-#     Distributions
-# =-=-=-=-=-=-=-=-=-=-= #
-load('./BioticDistribution/RandomForest/Data/RandForest_Regression.RData')
-spPred <- RF_regression
-rm(RF_regression)
-
-# Spatial information as matrix
-XY <- xyFromCell(spPred, 1:ncell(spPred))
-colnames(XY) <- c('Longitude','Latitude')
-
-# Occurrence data as matrix
-cooc <- as.matrix(spPred)
-
-# Remove all NAs
-uid <- apply(cooc, 1, function(x) !all(is.na(x)))
-XY <- XY[uid, ]
-cooc <- cooc[uid, ]
-
-# Export as sf object
-biotic <- cbind(cooc, XY) %>%
-          as.data.frame() %>%
-          st_as_sf(x = .,
-                   coords = c("Longitude", "Latitude"),
-                   crs = projection(spPred))
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Smoothing functions
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Kernel weighted smoothing with arbitrary bounding area
@@ -69,7 +33,7 @@ lissage <- function(df, field, bandwidth, resolution, grid, out_crs = 32198) {
                            iCellSize = resolution,
                            iBandwidth = bandwidth,
                            vQuantiles = NULL,
-                           dfCentroids = zone_xy)    
+                           dfCentroids = zone_xy)
   })
 
   # Values > 1 to 1
@@ -103,7 +67,6 @@ zoneGrid <- function(studyArea, resolution, bandwidth) {
   dplyr::select(x = X, y = Y)
 }
 
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Smoothing parameters
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -113,28 +76,110 @@ resolution <- 1000
 # Bandwidth
 bandwidth <- 5000
 
+# Study area
+load('./eDriversGrids/Data/egslSimple.RData')
+
 # Bounding box
 zone_bbox <- st_bbox(egslSimple)
 
 # Grid
 zone_xy <- zoneGrid(egslSimple, resolution, bandwidth)
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Data
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# =-=-=-=-=-=-=-=-=-=-= #
+#      Regression
+# =-=-=-=-=-=-=-=-=-=-= #
+load('./BioticDistribution/RandomForest/Data/RandForest_Regression.RData')
+
+# Spatial information as matrix
+XY <- xyFromCell(RF_regression, 1:ncell(RF_regression))
+colnames(XY) <- c('Longitude','Latitude')
+
+# Occurrence data as matrix
+cooc <- as.matrix(RF_regression)
+
+# Remove all NAs
+uid <- apply(cooc, 1, function(x) !all(is.na(x)))
+XY <- XY[uid, ]
+cooc <- cooc[uid, ]
+
+# Export as sf object
+bioticReg <- cbind(cooc, XY) %>%
+             as.data.frame() %>%
+             st_as_sf(x = .,
+                      coords = c("Longitude", "Latitude"),
+                      crs = projection(RF_regression))
+
+# =-=-=-=-=-=-=-=-=-=-= #
+#     Classification
+# =-=-=-=-=-=-=-=-=-=-= #
+load('./BioticDistribution/RandomForest/Data/RandForest_Classification.RData')
+
+# Spatial information as matrix
+XY <- xyFromCell(RF_classification, 1:ncell(RF_classification))
+colnames(XY) <- c('Longitude','Latitude')
+
+# Occurrence data as matrix
+cooc <- as.matrix(RF_classification)
+
+# Remove all NAs
+uid <- apply(cooc, 1, function(x) !all(is.na(x)))
+XY <- XY[uid, ]
+cooc <- cooc[uid, ]
+
+# Export as sf object
+bioticClass <- cbind(cooc, XY) %>%
+               as.data.frame() %>%
+               st_as_sf(x = .,
+                        coords = c("Longitude", "Latitude"),
+                        crs = projection(RF_classification))
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Smoothing species distributions
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sp <- colnames(st_drop_geometry(biotic))
+# =-=-=-=-=-=-=-=-=-=-= #
+#      Regression
+# =-=-=-=-=-=-=-=-=-=-= #
+sp <- colnames(st_drop_geometry(bioticReg))
 species <- vector('list', length(sp))
 names(species) <- sp
 
 for(i in sp) {
   cat(i, '\r')
-  species[[i]] <- lissage(df = biotic,
+  species[[i]] <- lissage(df = bioticReg,
                           field = i,
                           bandwidth = bandwidth,
                           resolution = resolution,
                           grid = zone_xy)
 }
 
-species <- stack(species)
+RF_regression_smooth <- stack(species)
 
-save(species, file = './BioticDistribution/GLM/Data/speciesDistribution.RData')
+# =-=-=-=-=-=-=-=-=-=-= #
+#     Classification
+# =-=-=-=-=-=-=-=-=-=-= #
+sp <- colnames(st_drop_geometry(bioticClass))
+species <- vector('list', length(sp))
+names(species) <- sp
+
+for(i in sp) {
+  cat(i, '\r')
+  species[[i]] <- lissage(df = bioticClass,
+                          field = i,
+                          bandwidth = bandwidth,
+                          resolution = resolution,
+                          grid = zone_xy)
+}
+
+RF_classification_smooth <- stack(species)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Export
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+save(RF_regression_smooth, file = './BioticDistribution/RandomForest/Data/RandForest_Regression_Smooth.RData')
+save(RF_regression_smooth, file = './BioticDistribution/RandomForest/Data/RF_classification_smooth.RData')
