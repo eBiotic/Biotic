@@ -128,7 +128,7 @@ for(i in 1:nSp) {
   #     Species empirical occurrences
   # -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
   # Identify species in biotic data
-  uid <- biotic$species == sp$species[i]
+  uid <- which(biotic$species == sp$species[i])
 
   # Plot empirical data
   layout(mat)#, heights = c(1,.8,.8), widths = c(.8,1,1,.8))
@@ -137,9 +137,9 @@ for(i in 1:nSp) {
   # Study area
   plot(st_geometry(egslSimple))
 
-  # Absences
-  uid2 <- biotic$presence[uid] == 0
-  plot(st_geometry(biotic[uid[uid2], ]), pch = 20, cex = .75, col = '#8a383888', add = T)
+  # # Absences
+  # uid2 <- biotic$presence[uid] == 0
+  # plot(st_geometry(biotic[uid[uid2], ]), pch = 20, cex = .75, col = '#8a383888', add = T)
 
   # Presences
   uid2 <- biotic$presence[uid] == 1
@@ -171,10 +171,10 @@ for(i in 1:nSp) {
   # -=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
   graphicsutils::plot0()
   points(x = -1, y = .75, pch = 20, cex = 2, col = '#4d81a7')
-  points(x = -1, y = .6, pch = 20, cex = 2, col = '#8a3838')
+  # points(x = -1, y = .6, pch = 20, cex = 2, col = '#8a3838')
   text(x = -.75, y = .75, 'Presence', cex  = 1.25, adj = c(0,.5), font = 2)
-  text(x = -.75, y = .6, 'Absence*', cex  = 1.25, adj = c(0,.5), font = 2)
-  text(x = -.75, y = .45, '*Sometimes includes\npseudo absences', cex = .9, adj = c(0,.5))
+  # text(x = -.75, y = .6, 'Absence*', cex  = 1.25, adj = c(0,.5), font = 2)
+  # text(x = -.75, y = .45, '*Sometimes includes\npseudo absences', cex = .9, adj = c(0,.5))
 
   # Page break
   cat('\n\n\\pagebreak\n')
