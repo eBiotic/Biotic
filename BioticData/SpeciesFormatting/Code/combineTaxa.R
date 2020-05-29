@@ -1,3 +1,4 @@
+# source('./BioticData/SpeciesFormatting/Code/combineTaxa.R')
 # Form groups of taxa as a vector, with taxa to combine seperated with ' | '
 # Main taxa that will be used for aggregation should be place first
 
@@ -205,14 +206,24 @@ combineTaxa <- c(
   # Subspecies too detailed for my analyses
   'Arctozenus risso | Arctozenus risso kroyeri',
 
-  # Change subspecies
+  # Change to species, assuming that it is Stomias boa ferox
   'Stomias boa ferox | Stomias boa boa | Stomias boa',
 
   # Marine birds, to verify at some point but likely unimportant for the datasets I currently have in hand
   'Larus sp. | Larus marinus',
 
   # For fish, might need to be revised as well
-  'Lampanyctus sp. | Lampanyctus macdonaldi'
+  'Lampanyctus sp. | Lampanyctus macdonaldi',
+
+  # Genus scale sufficient
+  'Mesodesma sp. | Mesodesma arctatum',
+
+  # All same species, keep to species level
+  'Ciliatocardium ciliatum | Clinocardium sp. | Clinocardium ciliatum',
+
+  # Same species
+  'Osmerus mordax mordax | Osmerus mordax'
+
 )
 
 save(combineTaxa, file = './BioticData/SpeciesFormatting/Data/combineTaxa.RData')

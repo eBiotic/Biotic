@@ -1,3 +1,4 @@
+# source('./BioticData/ObsMer_1999-2015_MPO/Code/1-SeaObservers.r')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                     LIBRARIES
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,6 +132,7 @@ obsSp$species <- gsub('Tealia felina','Urticina felina', obsSp$species)
 obsSp$species <- gsub('Tetrapturus albidus','Kajikia albida', obsSp$species)
 obsSp$species <- gsub('Ulcina olrikii','Aspidophoroides olrikii', obsSp$species)
 obsSp$species <- gsub('Gasterosteus aculeatus','Gasterosteus aculeatus aculeatus', obsSp$species)
+obsSp$species <- gsub('Urophycis chesteri','Phycis chesteri', obsSp$species)
 
 # Add species names to obs dataset
 obs <- left_join(obs, obsSp[, 1:2], by = c('Sp_visee' = 'obsID')) %>%

@@ -1,3 +1,4 @@
+# source('./BioticData/ZIF-Fisheries-2010-2015/Code/1-ZIF.R')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                     LIBRARIES
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,7 +113,7 @@ spList$Scientific <- gsub("Crabe araign\x8ee",'Hyas araneus', spList$Scientific)
 spList$Scientific <- gsub("Poulamon",'Microgadus tomcod', spList$Scientific)
 spList$Scientific <- gsub("Thon rouge",'Thunnus thynnus', spList$Scientific)
 spList$Scientific <- gsub("Morue de roche",'Gadus ogac', spList$Scientific)
-spList$Scientific <- gsub("Clovisse arctique",'Mesodesma arctatum', spList$Scientific)
+spList$Scientific <- gsub("Clovisse arctique",'Mesodesma sp.', spList$Scientific)
 spList$Scientific <- gsub("Mako \x88 nageoires courtes",'Isurus oxyrinchus', spList$Scientific)
 spList$Scientific <- gsub("Gaspareau",'Alosa pseudoharengus', spList$Scientific)
 spList$Scientific <- gsub("Loquette d'Am\x8erique",'Zoarces americanus', spList$Scientific)
