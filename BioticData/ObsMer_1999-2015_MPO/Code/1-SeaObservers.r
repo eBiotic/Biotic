@@ -133,6 +133,7 @@ obsSp$species <- gsub('Tetrapturus albidus','Kajikia albida', obsSp$species)
 obsSp$species <- gsub('Ulcina olrikii','Aspidophoroides olrikii', obsSp$species)
 obsSp$species <- gsub('Gasterosteus aculeatus','Gasterosteus aculeatus aculeatus', obsSp$species)
 obsSp$species <- gsub('Urophycis chesteri','Phycis chesteri', obsSp$species)
+obsSp$species <- gsub('Sergestes arcticus','Eusergestes arcticus', obsSp$species)
 
 # Add species names to obs dataset
 obs <- left_join(obs, obsSp[, 1:2], by = c('Sp_visee' = 'obsID')) %>%

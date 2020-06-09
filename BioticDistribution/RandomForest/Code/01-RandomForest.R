@@ -21,6 +21,8 @@ envCov <- c('Bathy_Mean',
             'sat','Present.Surface.Dissolved.oxygen.Mean',
             'Present.Benthic.Mean.Depth.Primary.productivity.Mean','Present.Surface.Primary.productivity.Mean')
 
+add X,Y
+
 # Environmental data
 env <- env[[envCov]]
 
