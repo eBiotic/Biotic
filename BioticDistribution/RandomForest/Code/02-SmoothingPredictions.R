@@ -1,3 +1,4 @@
+# source('./BioticDistribution/RandomForest/Code/02-SmoothingPredictions.R')
 # Libraries
 library(sf)
 library(sp)
@@ -5,7 +6,7 @@ library(tidyverse)
 library(magrittr)
 library(raster)
 library(btb)
-
+load('./eDriversGrids/Data/RasterGrid-1000m2.RData')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Smoothing functions
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,11 +42,12 @@ lissage <- function(df, field, bandwidth, resolution, grid, out_crs = 32198) {
 
   # Rasterization
   # message("\nrasterizing...")
-  raster::raster(xmn = plyr::round_any(zone_bbox[1] - bandwidth, resolution, f = floor),
-                 ymn = plyr::round_any(zone_bbox[2] - bandwidth, resolution, f = floor),
-                 xmx = plyr::round_any(zone_bbox[3] + bandwidth, resolution, f = ceiling),
-                 ymx = plyr::round_any(zone_bbox[4] + bandwidth, resolution, f = ceiling),
-                 resolution = resolution) %>%
+  rasterGrid %>%
+  # raster::raster(xmn = plyr::round_any(zone_bbox[1] - bandwidth, resolution, f = floor),
+  #                ymn = plyr::round_any(zone_bbox[2] - bandwidth, resolution, f = floor),
+  #                xmx = plyr::round_any(zone_bbox[3] + bandwidth, resolution, f = ceiling),
+  #                ymx = plyr::round_any(zone_bbox[4] + bandwidth, resolution, f = ceiling),
+  #                resolution = resolution) %>%
     fasterize::fasterize(kernel, ., field = field)
 }
 

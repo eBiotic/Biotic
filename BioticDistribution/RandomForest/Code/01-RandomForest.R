@@ -1,3 +1,4 @@
+# source('./BioticDistribution/RandomForest/Code/01-RandomForest.R')
 # Libraries
 library(sf)
 library(tidyverse)
@@ -19,9 +20,8 @@ envCov <- c('Bathy_Mean',
             'sst','sbt',
             'ARAG','Present.Surface.pH.tif',
             'sat','Present.Surface.Dissolved.oxygen.Mean',
-            'Present.Benthic.Mean.Depth.Primary.productivity.Mean','Present.Surface.Primary.productivity.Mean')
-
-add X,Y
+            'Present.Benthic.Mean.Depth.Primary.productivity.Mean','Present.Surface.Primary.productivity.Mean',
+            'X','Y')
 
 # Environmental data
 env <- env[[envCov]]
